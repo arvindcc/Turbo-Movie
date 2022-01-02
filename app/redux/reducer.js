@@ -1,4 +1,4 @@
-import { SET_LOADING, UNSET_LOADING, LOGIN, REQUEST_MOVIE_LIST, RECIEVE_MOVIE_LIST } from '../redux/action';
+import { SET_LOADING, UNSET_LOADING, LOGIN, REQUEST_MOVIE_LIST, RECIEVE_MOVIE_LIST, LOGOUT } from '../redux/action';
 const initialState = {
     user: {},
     isLoading: false,
@@ -22,6 +22,11 @@ const movieReducer = (state = initialState, action) => {
                 user:{
                     name: action.payload
                 }
+            };
+        case LOGOUT:
+            return {
+                ...state,
+                user: null
             };
         case RECIEVE_MOVIE_LIST:
             return {

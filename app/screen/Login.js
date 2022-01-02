@@ -10,9 +10,9 @@ import { Button, Input, Stack,   FormControl,
   WarningOutlineIcon, } from 'native-base';
 import styles from './atom';
 import appIcon from '../assets/img/TurboMovie_Icon.png'
-import {login, setLoding, unsetLoding} from '../redux/action'
+import {requestLogin, setLoding, unsetLoding} from '../redux/action'
 
-const Login = ({navigation, user, login}) => {
+const Login = ({ navigation, user, requestLogin}) => {
   const [username, setUsername] = useState(null)
   const [password, setPassword] = useState(null)
   const [error, setError] = useState(false)
@@ -53,8 +53,9 @@ const Login = ({navigation, user, login}) => {
                   setError(true)
                   return
                 }
-                login(username)
-                navigation.navigate('MovieList')}}
+                requestLogin(username)
+                navigation.navigate('MovieList')
+              }}
             >
               Login
             </Button>
@@ -65,6 +66,6 @@ const Login = ({navigation, user, login}) => {
 
 export default connect(
   (store) => (store.movieReducer), 
-  {login, setLoding, unsetLoding}
+  {requestLogin, setLoding, unsetLoding}
   )(Login)
 

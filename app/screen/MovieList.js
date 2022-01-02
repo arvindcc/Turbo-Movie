@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import { SafeAreaView, ScrollView, FlatList, Text } from 'react-native';
+import React, {useEffect} from 'react';
+import { SafeAreaView, FlatList, StatusBar, Text} from 'react-native';
 import { connect } from 'react-redux';
-import {requestMovieList, setLoding, unsetLoding} from '../redux/action'
+import {requestMovieList} from '../redux/action'
 import {
   Spinner,
   VStack,
@@ -9,12 +9,9 @@ import {
 import MovieCard from '../component'
 
 const MovieList = props => {
-  const { movies, requestMovieList, setLoding, unsetLoding} = props
+  const { user, movies, requestMovieList, navigation} = props
     useEffect(() => {
-      setLoding()
-      requestMovieList()
-      unsetLoding()
-      console.log(props)
+      !movies?.length && requestMovieList()
     }, [])
     
     const renderItem = ({ item }) => (
@@ -22,9 +19,15 @@ const MovieList = props => {
     );
 
     return (
-      <SafeAreaView>
+      <SafeAreaView style={{
+        display:'flex',
+        padding: 10,
+        backgroundColor: 'white'
+      }}>
         {!movies?.length && 
-          <VStack space={4} alignItems="center"><Spinner size="lg" /></VStack>
+          <VStack space={4} alignItems="center" justifyContent='center'>
+              <Spinner size="lg" />
+          </VStack>
         }
           <FlatList
             data={movies}
@@ -37,6 +40,6 @@ const MovieList = props => {
     
     export default connect(
       (store) => (store.movieReducer), 
-      {requestMovieList, setLoding, unsetLoding}
+      {requestMovieList}
     )(MovieList)
     

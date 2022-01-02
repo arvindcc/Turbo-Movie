@@ -9,7 +9,8 @@ import styles from './atom';
 import appIcon from '../assets/img/TurboMovie_Icon.png'
 import {  Button} from 'native-base';
 
-const App = ({navigation}) => {
+const Welcome = ({navigation}) => {
+  console.log('Welcome',navigation)
   return (
     <SafeAreaView style={styles.welcomeContainer}>
       <View style={styles.appImage}>
@@ -19,10 +20,12 @@ const App = ({navigation}) => {
         <Text style={styles.welcomeTitle}>WELCOME</Text>
       </View>
       <View>
-        <Button style={styles.button} onPress={() => navigation.navigate('Login')}>GETTING START</Button>
+        <Button style={styles.button} onPress={() => {
+          console.log('onPress')
+          navigation.navigate('Login')
+          }}>GETTING START</Button>
       </View>
     </SafeAreaView>
   );
 };
-
-export default App;
+export default Welcome;

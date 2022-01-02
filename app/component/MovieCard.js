@@ -4,6 +4,7 @@ import halfStar from '../assets/img/half-star.png'
 import star from '../assets/img/star.png' 
 
 const MovieCard = ({
+    id,
     title,
     background_image,
     rating,
@@ -39,6 +40,7 @@ const MovieCard = ({
             width: 80
           }} 
           source={{uri: small_cover_image}}
+          key={id}
           />
           <View style={{
             flex:3, 

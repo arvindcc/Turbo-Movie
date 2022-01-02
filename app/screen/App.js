@@ -1,23 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   View,
   Image,TouchableHighlight
 } from 'react-native';
+import {connect} from 'react-redux'
 import styles from './atom';
 import appIcon from '../assets/img/TurboMovie_Icon.png'
-import { Welcome, Login, MovieList} from '../screen';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-const Stack = createNativeStackNavigator();
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {setLoding, unsetLoding} from '../redux/action'
 
-const App = ({navigation}) => {
+const App = ({navigation, route, isLoading, setLoding, unsetLoding, ...rest}) => {
+  const [isAuthorize,  setIsAuthorized] = useState(false)
+  useEffect(() => {
+      const checkAuthentication = async() => {
+          try{
+              setLoding()
+              const token = await AsyncStorage.getItem('token')
+              if(token)
+                  setIsAuthorized(!!token)
+              unsetLoding()
+          }catch (e){
+              unsetLoding()
+      }
+    }
+    checkAuthentication()
+    // setTimeout(() => {navigation.navigate(!isAuthorize ? 'Welcome' : 'MovieList')}, 5000)
+  },[])
+
   return (
     <SafeAreaView style={styles.appContainer}>
       <TouchableHighlight
         activeOpacity={0.6}
         underlayColor="#DDDDDD"
-        onPress={() => navigation.navigate('Welcome')}
+        onPress={() => navigation.navigate(!isAuthorize ? 'Welcome' : 'MovieList')}
       >
         <View style={styles.appImage}>
           <Image source={appIcon}></Image>
@@ -27,20 +43,7 @@ const App = ({navigation}) => {
     </SafeAreaView>
   );
 };
-const AppContainer = () => (
-  <NavigationContainer>
-    <Stack.Navigator initialRouteName="App">
-      <Stack.Screen name="App"  component={App} options={{header: false}}/>
-      <Stack.Screen name="Welcome" component={Welcome} options={{headerShown: false}}/>
-      <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
-      <Stack.Screen 
-        name="MovieList" 
-        component={MovieList} 
-        options={{ 
-          title: 'Movie Turbo' 
-        }}/>
-    </Stack.Navigator>
-  </NavigationContainer>
-)
-
-export default App;
+export default connect(
+  (store) => (store.movieReducer),
+  {setLoding, unsetLoding}
+)(App);
